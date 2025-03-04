@@ -3,6 +3,7 @@ import java.util.Queue;
 
 public class Jobloader extends Thread {
 
+
     private Queue<Job> jobQueue;
 
     public Jobloader(Queue<Job> jobQueue) {
@@ -36,7 +37,7 @@ public class Jobloader extends Thread {
         int memoryRequired = Integer.parseInt(parts[3]);
 
         Job job = new Job(processID, burstTime, priority, memoryRequired); // create new job
-        jobQueue.add(job); // put it in ready queue
+        jobQueue.add(job); 
 
         System.out.println("Job loaded :" + job.getId());
     }

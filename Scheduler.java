@@ -2,6 +2,7 @@ import java.util.Queue;
 
 public abstract class Scheduler extends Thread{
     
+    private MemoryManager memoryManager;
     protected Queue<Job> readyQueue;
     protected Queue<Job> executedQueue;
 
