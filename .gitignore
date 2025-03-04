@@ -1,3 +1,5 @@
 /Job.class
 /Jobloader.class
 /MemoryManager.class
+/FCFSScheduler.class
+/Scheduler.class

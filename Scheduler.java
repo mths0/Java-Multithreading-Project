@@ -2,16 +2,33 @@ import java.util.Queue;
 
 public abstract class Scheduler extends Thread{
     
-    private MemoryManager memoryManager;
+    protected MemoryManager memoryManager;
     protected Queue<Job> readyQueue;
+    protected Queue<Job> WitingQueue;
     protected Queue<Job> executedQueue;
-
-    public Scheduler(Queue<Job> readyQueue){
-        this.readyQueue = readyQueue;
+    protected Queue<Job> JopQueue;
+    public Scheduler(Queue<Job> JopQueue){
+    	this.JopQueue=readyQueue;
+     
     }
+   
+
+    @Override
+	public void run() {
+    	  while(!JopQueue.isEmpty()) {
+       	   Job currentJob=JopQueue.poll();
+       	   if(memoryManager.allocateMemory(currentJob.getMemoryRequired())) {
+       		  readyQueue.add(currentJob);
+       	   }
+       	   else {
+       		   WitingQueue.add(currentJob);
+       	   }
+          }
+	}
 
 
-    public abstract void scheduler();
+
+	public abstract void scheduler();
 
     public void executeJob(Job job){
 
@@ -27,6 +44,7 @@ public abstract class Scheduler extends Thread{
     public void calculateWaitingTime(){}
 
     public void calculateTurnaroundTime(){}
+    public abstract void addRemaindJop();
 
 
 }

@@ -78,4 +78,11 @@ public class Job {
     public void UpdateState(String NewState){
         this.state=NewState;
     }
+
+	@Override
+	public String toString() {
+		return "Job [id=" + id + ", burstTime=" + burstTime + ", priority=" + priority + ", memoryRequired="
+				+ memoryRequired + ", state=" + state + ", waitingTime=" + waitingTime + ", turnaroundTime="
+				+ turnaroundTime + "]";
+	}
 }
