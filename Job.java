@@ -4,8 +4,8 @@ public class Job {
     private int priority;
     private int memoryRequired;
     private String state;
-    private double waitingTime;
-    private double turnaroundTime;
+    private int waitingTime;
+    private int turnaroundTime;
 
 
     public Job(int id, int burstTime, int priority, int memoryRequired){
@@ -59,7 +59,7 @@ public class Job {
         this.state = state;
     }
 
-    public double getWaitingTime() {
+    public int getWaitingTime() {
         return waitingTime;
     }
 
@@ -67,7 +67,7 @@ public class Job {
         this.waitingTime = waitingTime;
     }
 
-    public double getTurnaroundTime() {
+    public int getTurnaroundTime() {
         return turnaroundTime;
     }
 
