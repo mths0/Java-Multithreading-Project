@@ -44,6 +44,7 @@ public abstract class Scheduler extends Thread{
     public void calculateWaitingTime(){}
 
     public void calculateTurnaroundTime(){}
+    public abstract void addRemaindJop();
 
 
 }
