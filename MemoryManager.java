@@ -1,4 +1,5 @@
 public class MemoryManager {
+	
     private int TotalMemory=2048;//max memory 
     private int UsedMempry=0;//memory that allocated
 	
@@ -8,12 +9,11 @@ public class MemoryManager {
 			throw new IllegalArgumentException("Invalid memory size");
 			
 		if(UsedMempry+memorySize<=TotalMemory) {
-			//create a jop 
 			UsedMempry+=memorySize;
 			return true;
 		}
 		else {
-			throw new OutOfMemoryError("There is not enough memory to allocate"+memorySize+"MP");
+			throw new OutOfMemoryError("There is not enough memory to allocate "+memorySize+" MP");
 
 	}}catch (Exception e) {
 		System.err.println(e.getMessage());
