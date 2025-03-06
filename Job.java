@@ -6,6 +6,7 @@ public class Job {
     private String state;
     private int waitingTime;
     private int turnaroundTime;
+    private int ArrivalTime;
 
 
     public Job(int id, int burstTime, int priority, int memoryRequired){
@@ -13,9 +14,10 @@ public class Job {
         this.burstTime=burstTime;
         this.priority=priority;
         this.memoryRequired=memoryRequired;
-        this.state="Ready";
+        this.state="New";
         this.waitingTime=0;
         this.turnaroundTime=0;
+        this.ArrivalTime=0;
 
     }
 
@@ -79,10 +81,18 @@ public class Job {
         this.state=NewState;
     }
 
-	@Override
+    public int getArrivalTime() {
+        return ArrivalTime;
+    }
+
+    public void setArrivalTime(int arrivalTime) {
+        ArrivalTime = arrivalTime;
+    }
+
+    @Override
 	public String toString() {
 		return "Job [id=" + id + ", burstTime=" + burstTime + ", priority=" + priority + ", memoryRequired="
 				+ memoryRequired + ", state=" + state + ", waitingTime=" + waitingTime + ", turnaroundTime="
-				+ turnaroundTime + "]";
+				+ turnaroundTime + ", arrivaltime=" + ArrivalTime + "]";
 	}
 }
