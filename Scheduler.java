@@ -6,17 +6,17 @@ public abstract class Scheduler extends Thread{
     protected Queue<Job> readyQueue;
     protected Queue<Job> WitingQueue;
     protected Queue<Job> executedQueue;
-    protected Queue<Job> JopQueue;
-    public Scheduler(Queue<Job> JopQueue){
-    	this.JopQueue=readyQueue;
+    protected Queue<Job> JobQueue;
+    public Scheduler(Queue<Job> JobQueue){
+    	this.JobQueue=JobQueue;
      
     }
    
 
     @Override
 	public void run() {
-    	  while(!JopQueue.isEmpty()) {
-       	   Job currentJob=JopQueue.poll();
+    	  while(!JobQueue.isEmpty()) {
+       	   Job currentJob=JobQueue.poll();
        	   if(memoryManager.allocateMemory(currentJob.getMemoryRequired())) {
        		  readyQueue.add(currentJob);
        	   }
