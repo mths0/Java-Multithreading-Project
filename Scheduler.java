@@ -8,11 +8,11 @@ public abstract class Scheduler extends Thread{
     protected Queue<Job> executedQueue;
     protected Queue<Job> JopQueue;
     public Scheduler(Queue<Job> JopQueue){
-    	this.JopQueue=readyQueue;
+    	this.JopQueue=JopQueue;
      
     }
    
-
+ //thread to fill ready queue 
     @Override
 	public void run() {
     	  while(!JopQueue.isEmpty()) {

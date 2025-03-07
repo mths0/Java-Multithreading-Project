@@ -2,11 +2,14 @@ import java.util.Queue;
 
 public class FCFSScheduler extends Scheduler{
 
-    public FCFSScheduler(Queue<Job> readyQueue) {
-        super(readyQueue);
-    }
+   
 
-    @Override
+    public FCFSScheduler(Queue<Job> JopQueue) {
+		super(JopQueue);
+		// TODO Auto-generated constructor stub
+	}
+
+	@Override
     public void scheduler() {
         int currentTime = 0;
 

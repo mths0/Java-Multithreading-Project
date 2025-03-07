@@ -2,8 +2,8 @@ import java.util.Queue;
 
 public class RoundRobin extends Scheduler{
 
-    public RoundRobin(Queue<Job> readyQueue) {
-        super(readyQueue);
+    public RoundRobin(Queue<Job> JopQueue) {
+        super(JopQueue);
         //TODO Auto-generated constructor stub
     }
 
@@ -12,5 +12,11 @@ public class RoundRobin extends Scheduler{
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'scheduler'");
     }
+
+	@Override
+	public void addRemaindJop() {
+		// TODO Auto-generated method stub
+		
+	}
     
 }

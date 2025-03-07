@@ -1,3 +1,5 @@
+import java.util.Comparator;
+
 public class Job {
     private int id;
     private int burstTime;
@@ -85,4 +87,6 @@ public class Job {
 				+ memoryRequired + ", state=" + state + ", waitingTime=" + waitingTime + ", turnaroundTime="
 				+ turnaroundTime + "]";
 	}
+
+	
 }
