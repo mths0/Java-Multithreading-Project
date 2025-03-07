@@ -16,7 +16,7 @@ public class FCFSScheduler extends Scheduler{
         while(! readyQueue.isEmpty()){
             Job currentJob = readyQueue.poll();
             executeJob(currentJob);
-            memoryManager.deallocateMemory(currentJob.getMemoryRequired());
+           
             currentJob.setWaitingTime(currentTime);
             currentTime += currentJob.getBurstTime();
             executedQueue.add(currentJob);
@@ -26,6 +26,7 @@ public class FCFSScheduler extends Scheduler{
 
             currentJob.setTurnaroundTime(currentJob.getWaitingTime() + currentJob.getBurstTime());
         }
+        System.out.println(GC());
     }
 
 	public void addRemaindJop() {
@@ -39,6 +40,13 @@ public class FCFSScheduler extends Scheduler{
 	       	   
 	          }
 		
+	}
+	public String GC() {
+		String process="";
+		while (!executedQueue.isEmpty()) {
+			process+=executedQueue.poll().getId()+"|";
+		}
+		return process;
 	}
 
 
