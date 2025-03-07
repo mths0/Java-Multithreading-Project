@@ -35,7 +35,7 @@ public class RoundRobin extends Scheduler{
                job.setTurnaroundTime(currentTime-job.getArrivalTime());
                executedQueue.add(job);
                if( memoryManager.deallocateMemory(job.getMemoryRequired())) {
-                   addRemaindJop2(currentTime);
+            	   addRemaindJop(currentTime);
                }
            }
 
@@ -44,12 +44,6 @@ public class RoundRobin extends Scheduler{
     }
 
 
-	@Override
-	public void addRemaindJop() {
-		// TODO Auto-generated method stub
-		
-	}
-    
 
 
 
@@ -67,7 +61,7 @@ public class RoundRobin extends Scheduler{
         System.out.println("Finished Job ID: " + job.getId());
     }
 
-    public void addRemaindJop2(int arrivaltime) {
+    public void addRemaindJop(int arrivaltime) {
         while(!WitingQueue.isEmpty()) {
             Job currentJob=WitingQueue.peek();
             if(memoryManager.allocateMemory(currentJob.getMemoryRequired())) {
@@ -80,6 +74,5 @@ public class RoundRobin extends Scheduler{
         }
     }
 
-    public void addRemaindJop1() {}
-//github.com/mths0/Java-Multithreading-Project
+    
 }
