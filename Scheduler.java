@@ -32,7 +32,6 @@ public abstract class Scheduler extends Thread{
        		   WitingQueue.add(currentJob);
        	   }
           }
-          scheduler();  //! i only added this and now it works.
 	}
 
 
