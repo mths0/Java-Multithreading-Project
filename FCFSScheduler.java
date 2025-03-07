@@ -2,33 +2,38 @@ import java.util.Queue;
 
 public class FCFSScheduler extends Scheduler{
 
-    public FCFSScheduler(Queue<Job> readyQueue) {
-        super(readyQueue);
-    }
+   
 
-    @Override
+    public FCFSScheduler(Queue<Job> JopQueue) {
+		super(JopQueue);
+		// TODO Auto-generated constructor stub
+	}
+
+	@Override
     public void scheduler() {
         int currentTime = 0;
 
         while(! readyQueue.isEmpty()){
             Job currentJob = readyQueue.poll();
             executeJob(currentJob);
-            memoryManager.deallocateMemory(currentJob.getMemoryRequired());
-            currentJob.setWaitingTime(currentTime);
+           
+            currentJob.setWaitingTime(currentTime-currentJob.getArrivalTime());
             currentTime += currentJob.getBurstTime();
             executedQueue.add(currentJob);
            if( memoryManager.deallocateMemory(currentJob.getMemoryRequired())) {
-        	   addRemaindJop();
+        	   addRemaindJop(currentTime);
            }
 
             currentJob.setTurnaroundTime(currentJob.getWaitingTime() + currentJob.getBurstTime());
         }
+        System.out.println(GC());
     }
 
-	public void addRemaindJop() {
+	public void addRemaindJop(int currentTime) {
 		 while(!WitingQueue.isEmpty()) {
 	       	   Job currentJob=WitingQueue.peek();
 	       	   if(memoryManager.allocateMemory(currentJob.getMemoryRequired())) {
+	       		currentJob.setArrivalTime(currentTime);
 	       		  readyQueue.add(currentJob);
 	       		  WitingQueue.poll();
 	       	   }
@@ -36,6 +41,13 @@ public class FCFSScheduler extends Scheduler{
 	       	   
 	          }
 		
+	}
+	public String GC() {
+		String process="";
+		while (!executedQueue.isEmpty()) {
+			process+=executedQueue.poll().getId()+"|";
+		}
+		return process;
 	}
 
 

@@ -1,3 +1,4 @@
+import java.util.LinkedList;
 import java.util.Queue;
 
 public abstract class Scheduler extends Thread{
@@ -6,19 +7,26 @@ public abstract class Scheduler extends Thread{
     protected Queue<Job> readyQueue;
     protected Queue<Job> WitingQueue;
     protected Queue<Job> executedQueue;
-    protected Queue<Job> JobQueue;
+    protected PriorityQueue<Job> PriorityQueue;
+    protected Queue<Job> JopQueue;
+    
     public Scheduler(Queue<Job> JobQueue){
-    	this.JobQueue=JobQueue;
-     
+    	this.JopQueue=JobQueue;
+    	memoryManager=new MemoryManager();
+    	readyQueue= new LinkedList<>(); 
+    	WitingQueue=new LinkedList<>(); 
+    	executedQueue=new LinkedList<>();
+    	
     }
    
-
+ //thread to fill ready queue 
     @Override
 	public void run() {
-    	  while(!JobQueue.isEmpty()) {
-       	   Job currentJob=JobQueue.poll();
+    	  while(!JopQueue.isEmpty()) {
+       	   Job currentJob=JopQueue.poll();
        	   if(memoryManager.allocateMemory(currentJob.getMemoryRequired())) {
        		  readyQueue.add(currentJob);
+       		
        	   }
        	   else {
        		   WitingQueue.add(currentJob);
@@ -44,7 +52,7 @@ public abstract class Scheduler extends Thread{
     public void calculateWaitingTime(){}
 
     public void calculateTurnaroundTime(){}
-    public abstract void addRemaindJop();
+    public abstract void addRemaindJop(int currentTime);
 
 
 }

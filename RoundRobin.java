@@ -4,8 +4,8 @@ public class RoundRobin extends Scheduler{
    private final int QuantumTime = 7;
 
 
-    public RoundRobin(Queue<Job> readyQueue) {
-        super(readyQueue);
+    public RoundRobin(Queue<Job> JopQueue) {
+        super(JopQueue);
         //TODO Auto-generated constructor stub
     }
 
@@ -35,13 +35,15 @@ public class RoundRobin extends Scheduler{
                job.setTurnaroundTime(currentTime-job.getArrivalTime());
                executedQueue.add(job);
                if( memoryManager.deallocateMemory(job.getMemoryRequired())) {
-                   addRemaindJop2(currentTime);
+            	   addRemaindJop(currentTime);
                }
            }
 
 
         }
     }
+
+
 
 
 
@@ -59,7 +61,7 @@ public class RoundRobin extends Scheduler{
         System.out.println("Finished Job ID: " + job.getId());
     }
 
-    public void addRemaindJop2(int arrivaltime) {
+    public void addRemaindJop(int arrivaltime) {
         while(!WitingQueue.isEmpty()) {
             Job currentJob=WitingQueue.peek();
             if(memoryManager.allocateMemory(currentJob.getMemoryRequired())) {
@@ -72,5 +74,5 @@ public class RoundRobin extends Scheduler{
         }
     }
 
-    public void addRemaindJop() {}
+    
 }
