@@ -1,15 +1,21 @@
 public class MemoryManager {
 	
     private int TotalMemory=2048;//max memory 
-    private int UsedMempry=0;//memory that allocated
+    private int UsedMemory=0;//memory that allocated
+
+
+	public MemoryManager(int TotalMemory){
+		this.TotalMemory = TotalMemory;
+
+	}
 	
 	public boolean allocateMemory(int memorySize) {
 		try {
 		if(memorySize<=0) 
 			throw new IllegalArgumentException("Invalid memory size");
 			
-		if(UsedMempry+memorySize<=TotalMemory) {
-			UsedMempry+=memorySize;
+		if(UsedMemory+memorySize<=TotalMemory) {
+			UsedMemory+=memorySize;
 			return true;
 		}
 		else {
@@ -25,8 +31,8 @@ public class MemoryManager {
 		if(memorySize<=0) 
 			throw new IllegalArgumentException("Invalid memory size");
 		
-		if(memorySize<=UsedMempry) {
-		UsedMempry-=memorySize;
+		if(memorySize<=UsedMemory) {
+		UsedMemory-=memorySize;
 		return true;
 		}
 		
