@@ -3,9 +3,9 @@ public class MemoryManager {
 	private int TotalMemory;// max memory
 	private int UsedMemory = 0;// memory that allocated
 
-	public MemoryManager(int TotalMemory) {
+	public MemoryManager() {
 
-		this.TotalMemory = TotalMemory;
+		this.TotalMemory = 2048;
 
 	}
 
