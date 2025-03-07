@@ -10,11 +10,12 @@ public static void main(String[] args) {
     //initialize 
     
     Queue<Job> jobQueue = new LinkedList<>();
-    MemoryManager memoryManager = new MemoryManager();
+    MemoryManager memoryManager = new MemoryManager(2048);
 
     //start job thread
     Jobloader jobloader = new Jobloader(jobQueue);
     jobloader.start();
+    System.out.println(jobQueue.toString());
 
     //user select Scheduling Algorithm
     Scanner scanner = new Scanner(System.in);
@@ -24,7 +25,7 @@ public static void main(String[] args) {
     //select based on user choice
     Scheduler scheduler = null;
     if(choice.equalsIgnoreCase("FCFS")){
-        scheduler = new FCFSScheduler(jobQueue);
+        scheduler = new FCFSScheduler(jobQueue, memoryManager);
     }else if(choice.equalsIgnoreCase("RR")){
         scheduler = new RoundRobin(jobQueue);
     // TODO make Priority class
@@ -33,7 +34,7 @@ public static void main(String[] args) {
     }*/
     }else{
         System.out.println("Invalid choice. FCFS Running as Default .");
-        scheduler = new FCFSScheduler(jobQueue);
+        scheduler = new FCFSScheduler(jobQueue, memoryManager);
     }
 
     //start system handler (if needed)
