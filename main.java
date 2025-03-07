@@ -26,12 +26,12 @@ public static void main(String[] args) {
     Scheduler scheduler = null;
     if(choice.equalsIgnoreCase("FCFS")){
         scheduler = new FCFSScheduler(jobQueue, memoryManager);
+        
+        
     }else if(choice.equalsIgnoreCase("RR")){
-        scheduler = new RoundRobin(jobQueue);
-    // TODO make Priority class
-   /*  }else if(choice.equalsIgnoreCase("Priority")){
-        scheduler = new Priority(jobQueue);
-    }*/
+        scheduler = new RoundRobin(jobQueue, memoryManager);
+     }else if(choice.equalsIgnoreCase("Priority")){
+        scheduler = new Priority(jobQueue, memoryManager);
     }else{
         System.out.println("Invalid choice. FCFS Running as Default .");
         scheduler = new FCFSScheduler(jobQueue, memoryManager);
@@ -41,6 +41,7 @@ public static void main(String[] args) {
     
     //start Scheduler Thread
     scheduler.start();
+    
 
 
 
