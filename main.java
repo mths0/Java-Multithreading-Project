@@ -10,7 +10,7 @@ public static void main(String[] args) {
     //initialize 
     
     Queue<Job> jobQueue = new LinkedList<>();
-    MemoryManager memoryManager = new MemoryManager(2048);
+    MemoryManager memoryManager = new MemoryManager();
 
     //start job thread
     Jobloader jobloader = new Jobloader(jobQueue);
@@ -53,7 +53,7 @@ public static void main(String[] args) {
         // TODO Auto-generated catch block
         e.printStackTrace();
     }
-    
+    scheduler.scheduler();
     System.out.println("All jobs have been executed.");
 }
 
