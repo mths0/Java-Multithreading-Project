@@ -9,40 +9,34 @@ public class MemoryManager {
 	}
 
 	public boolean allocateMemory(int memorySize) {
-		try {
+		
 			if (memorySize <= 0)
-				throw new IllegalArgumentException("Invalid memory size");
+				return false;
 
-			if (UsedMemory + memorySize <= TotalMemory) {
+			else if (UsedMemory + memorySize <= TotalMemory) {
 				UsedMemory += memorySize;
 				return true;
 			} else {
-				throw new OutOfMemoryError("There is not enough memory to allocate " + memorySize + " MP");
+				return false;
 
 			}
-		} catch (Exception e) {
-			System.err.println(e.getMessage());
-			return false;
-		}
+		
 	}
 
 	public boolean deallocateMemory(int memorySize) {
-		try {
+		
 			if (memorySize <= 0)
-				throw new IllegalArgumentException("Invalid memory size");
+				return false;
 
 			if (memorySize <= UsedMemory) {
-				UsedMemory -= memorySize;
+				UsedMemory = UsedMemory-memorySize;
 				return true;
 			}
 
 			else
-				throw new IllegalStateException("amount of freed memory is grater than used memory");
+				return false;
 
-		} catch (Exception e) {
-			System.err.println(e.getMessage());
-			return false;
-		}
+		
 	}
 
 	public int getTotalMemory() {
