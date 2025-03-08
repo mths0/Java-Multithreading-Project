@@ -1,6 +1,6 @@
 public class MemoryManager {
 
-	private int TotalMemory;// max memory
+	private final int TotalMemory;// max memory
 	private int UsedMemory = 0;// memory that allocated
 
 	public MemoryManager() {
