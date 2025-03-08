@@ -10,9 +10,9 @@ public abstract class Scheduler extends Thread{
     protected PriorityQueue<Job> PriorityQueue;
     protected Queue<Job> JopQueue;
     
-    public Scheduler(Queue<Job> JobQueue){
+    public Scheduler(Queue<Job> JobQueue , MemoryManager memoryManager){
     	this.JopQueue=JobQueue;
-    	memoryManager=new MemoryManager();
+    	this.memoryManager = memoryManager;
     	readyQueue= new LinkedList<>(); 
     	WitingQueue=new LinkedList<>(); 
     	executedQueue=new LinkedList<>();

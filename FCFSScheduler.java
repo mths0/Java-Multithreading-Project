@@ -4,9 +4,9 @@ public class FCFSScheduler extends Scheduler{
 
    
 
-    public FCFSScheduler(Queue<Job> JopQueue) {
-		super(JopQueue);
-		// TODO Auto-generated constructor stub
+    public FCFSScheduler(Queue<Job> JopQueue, MemoryManager memoryManager) {
+		super(JopQueue, memoryManager);
+		
 	}
 
 	@Override

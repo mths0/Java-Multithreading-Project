@@ -4,9 +4,10 @@ import java.util.Queue;
 public class Priority  extends Scheduler  {
 
 	 protected PriorityQueue<Job> PriorityQueue;
-	public Priority(Queue<Job> JopQueue) {
+
+	public Priority(Queue<Job> JopQueue, MemoryManager memoryManager) {
 		
-		super(JopQueue);
+		super(JopQueue, memoryManager);
 		PriorityQueue=new PriorityQueue<>();
 		
 	}

@@ -4,8 +4,8 @@ public class RoundRobin extends Scheduler{
    private final int QuantumTime = 7;
 
 
-    public RoundRobin(Queue<Job> JopQueue) {
-        super(JopQueue);
+    public RoundRobin(Queue<Job> JopQueue, MemoryManager memoryManager) {
+        super(JopQueue, memoryManager);
         //TODO Auto-generated constructor stub
     }
 

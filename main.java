@@ -15,6 +15,7 @@ public static void main(String[] args) {
     //start job thread
     Jobloader jobloader = new Jobloader(jobQueue);
     jobloader.start();
+    System.out.println(jobQueue.toString());
 
     //user select Scheduling Algorithm
     Scanner scanner = new Scanner(System.in);
@@ -24,22 +25,31 @@ public static void main(String[] args) {
     //select based on user choice
     Scheduler scheduler = null;
     if(choice.equalsIgnoreCase("FCFS")){
-        scheduler = new FCFSScheduler(jobQueue);
+        scheduler = new FCFSScheduler(jobQueue, memoryManager);
+        
+        
     }else if(choice.equalsIgnoreCase("RR")){
+<<<<<<< HEAD
         scheduler = new RoundRobin(jobQueue);
   
      }else if(choice.equalsIgnoreCase("Priority")){
         scheduler = new Priority(jobQueue);
     
+=======
+        scheduler = new RoundRobin(jobQueue, memoryManager);
+     }else if(choice.equalsIgnoreCase("Priority")){
+        scheduler = new Priority(jobQueue, memoryManager);
+>>>>>>> branch 'main' of https://github.com/mths0/Java-Multithreading-Project
     }else{
         System.out.println("Invalid choice. FCFS Running as Default .");
-        scheduler = new FCFSScheduler(jobQueue);
+        scheduler = new FCFSScheduler(jobQueue, memoryManager);
     }
 
     //start system handler (if needed)
     
     //start Scheduler Thread
     scheduler.start();
+    
 
 
    
