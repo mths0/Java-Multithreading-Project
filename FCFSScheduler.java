@@ -15,7 +15,7 @@ public class FCFSScheduler extends Scheduler{
 
         while(! readyQueue.isEmpty()){
             Job currentJob = readyQueue.poll();
-            executeJob(currentJob);
+           executeJob(currentJob);
            
             currentJob.setWaitingTime(currentTime-currentJob.getArrivalTime());
             currentTime += currentJob.getBurstTime();

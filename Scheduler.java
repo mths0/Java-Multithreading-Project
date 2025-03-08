@@ -17,6 +17,7 @@ public abstract class Scheduler extends Thread{
     	WitingQueue=new LinkedList<>(); 
     	executedQueue=new LinkedList<>();
     	
+    	
     }
    
  //thread to fill ready queue 
