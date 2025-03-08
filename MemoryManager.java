@@ -18,8 +18,8 @@ public class MemoryManager {
 				UsedMemory += memorySize;
 				return true;
 			} else {
-				throw new OutOfMemoryError("There is not enough memory to allocate " + memorySize + " MP");
-
+				//throw new OutOfMemoryError("There is not enough memory to allocate " + memorySize + " MP");
+				return false;
 			}
 		} catch (Exception e) {
 			System.err.println(e.getMessage());
