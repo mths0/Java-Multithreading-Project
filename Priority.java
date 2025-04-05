@@ -1,57 +1,88 @@
-import java.util.Queue;
+import java.util.*;
 
+public class Priority extends Scheduler {
 
-public class Priority  extends Scheduler  {
+    protected PriorityQueue<Job> priorityQueue;
 
-	 protected PriorityQueue<Job> PriorityQueue;
+    public Priority(Queue<Job> jobQueue, MemoryManager memoryManager) {
+        super(jobQueue, memoryManager);
+        priorityQueue = new PriorityQueue<>();
+    }
 
-	public Priority(Queue<Job> JopQueue, MemoryManager memoryManager) {
-		
-		super(JopQueue, memoryManager);
-		PriorityQueue=new PriorityQueue<>();
-		
-	}
+    @Override
+    public void scheduler() {
+        int currentTime = 0;
+        List<Job> starvedJobs = new ArrayList<>();
+        int starvationThreshold = 50; // change this threshold if needed
 
+        // Move all ready jobs to priority queue
+        while (!readyQueue.isEmpty()) {
+            Job currentJob = readyQueue.poll();
+            priorityQueue.Enqueue(currentJob, currentJob.getPriority());
+        }
 
-	 public void scheduler() {
-	        int currentTime = 0;
-	        while(! readyQueue.isEmpty()){
-	        	 Job currentJob = readyQueue.poll();
-	       
-	        	PriorityQueue.Enqueue(currentJob, currentJob.getPriority());
-	        }
-	        	
-	       
-	        while(! PriorityQueue.isEmpty()){
-	            Job currentJob = PriorityQueue.serve();
-	            executeJob(currentJob);
-	            currentJob.setWaitingTime(currentTime-currentJob.getArrivalTime());
-	            currentTime += currentJob.getBurstTime();
-	            executedQueue.add(currentJob);
-	           if( memoryManager.deallocateMemory(currentJob.getMemoryRequired())) {
-	        	   addRemaindJop(currentTime);
-	           }
+        // Serve jobs based on priority
+        while (!priorityQueue.isEmpty()) {
+            Job currentJob = priorityQueue.serve();
+            executeJob(currentJob);
 
-	            currentJob.setTurnaroundTime(currentJob.getWaitingTime() + currentJob.getBurstTime());
-	        }System.out.println(GC());
-	    }
+            currentJob.setWaitingTime(currentTime - currentJob.getArrivalTime());
+            currentTime += currentJob.getBurstTime();
+            currentJob.setTurnaroundTime(currentJob.getWaitingTime() + currentJob.getBurstTime());
 
-		public void addRemaindJop(int currentTime) {
-			 while(!WitingQueue.isEmpty()) {
-		       	   Job currentJob=WitingQueue.peek();
-		       	   if(memoryManager.allocateMemory(currentJob.getMemoryRequired())) {
-		       		currentJob.setArrivalTime(currentTime);
-		       		PriorityQueue.Enqueue(currentJob, currentJob.getPriority());
-		       		  WitingQueue.poll();
-		       	   }
-		       	   else break;
-		       	   
-		          }
-			
-		}public String GC() {
-			String process="";
-			while (!executedQueue.isEmpty()) {
-				process+=executedQueue.poll().getId()+"|";
-			}
-			return process;
-		}}
+            // Starvation check
+            if (currentJob.getWaitingTime() > starvationThreshold) {
+                starvedJobs.add(currentJob);
+            }
+
+            executedQueue.add(currentJob);
+
+            if (memoryManager.deallocateMemory(currentJob.getMemoryRequired())) {
+                addRemaindJop(currentTime);
+            }
+        }
+
+        // Gantt Chart
+        System.out.println("\nGantt Chart:");
+        System.out.println(GC());
+
+        // Results Summary
+        System.out.println("\nResults:");
+        int totalWaiting = 0;
+        int totalTurnaround = 0;
+
+        for (Job job : executedQueue) {
+            // System.out.println("Job " + job.getId() +
+            //         " | Waiting Time: " + job.getWaitingTime() +
+            //         " | Turnaround Time: " + job.getTurnaroundTime());
+
+            totalWaiting += job.getWaitingTime();
+            totalTurnaround += job.getTurnaroundTime();
+        }
+
+        System.out.printf("Average Waiting Time: %.2f ms\n", (double) totalWaiting / executedQueue.size());
+        System.out.printf("Average Turnaround Time: %.2f ms\n", (double) totalTurnaround / executedQueue.size());
+
+        // Print starved jobs
+        if (!starvedJobs.isEmpty()) {
+            System.out.println("\nStarved Jobs Detected:");
+            for (Job j : starvedJobs) {
+                System.out.println("P" + j.getId() + " | Waited: " + j.getWaitingTime() + "ms");
+            }
+        }
+    }
+
+    @Override
+    public void addRemaindJop(int currentTime) {
+        while (!waitingQueue.isEmpty()) {
+            Job currentJob = waitingQueue.peek();
+            if (memoryManager.allocateMemory(currentJob.getMemoryRequired())) {
+                currentJob.setArrivalTime(currentTime);
+                priorityQueue.Enqueue(currentJob, currentJob.getPriority());
+                waitingQueue.poll();
+            } else {
+                break;
+            }
+        }
+    }
+}
