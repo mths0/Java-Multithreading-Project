@@ -29,17 +29,9 @@ public static void main(String[] args) {
         
         
     }else if(choice.equalsIgnoreCase("RR")){
-<<<<<<< HEAD
-        scheduler = new RoundRobin(jobQueue);
-  
-     }else if(choice.equalsIgnoreCase("Priority")){
-        scheduler = new Priority(jobQueue);
-    
-=======
         scheduler = new RoundRobin(jobQueue, memoryManager);
      }else if(choice.equalsIgnoreCase("Priority")){
         scheduler = new Priority(jobQueue, memoryManager);
->>>>>>> branch 'main' of https://github.com/mths0/Java-Multithreading-Project
     }else{
         System.out.println("Invalid choice. FCFS Running as Default .");
         scheduler = new FCFSScheduler(jobQueue, memoryManager);
