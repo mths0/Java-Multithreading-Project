@@ -1,78 +1,105 @@
-import java.util.Queue;
+import java.util.*;
 
-public class RoundRobin extends Scheduler{
-   private final int QuantumTime = 7;
+public class RoundRobin extends Scheduler {
+    private final int QuantumTime = 7;
+    private int currentTime = 0;
 
+    private final List<String> executionLog = new ArrayList<>();
+    private final List<Integer> timeStamps = new ArrayList<>();
 
-    public RoundRobin(Queue<Job> JopQueue, MemoryManager memoryManager) {
-        super(JopQueue, memoryManager);
-        //TODO Auto-generated constructor stub
+    public RoundRobin(Queue<Job> jobQueue, MemoryManager memoryManager) {
+        super(jobQueue, memoryManager);
     }
 
     @Override
     public void scheduler() {
-            int currentTime=0;
+        currentTime = 0;
 
-        while(!readyQueue.isEmpty()) {
-            Job job=readyQueue.poll();
-            int executionTime;
+        while (!readyQueue.isEmpty()) {
+            Job job = readyQueue.poll();
 
-            if(job.getBurstTime()>=QuantumTime)
-                executionTime=QuantumTime;
-            else {
-                executionTime=job.getBurstTime();
+            // Mark start time
+            timeStamps.add(currentTime);
+            executionLog.add("P" + job.getId());
+
+            int executionTime = Math.min(job.getBurstTime(), QuantumTime);
+
+            // Execute
+            executeJob(job, executionTime);
+            currentTime += executionTime;
+
+            if (job.getBurstTime() > 0) {
+                // Not finished, go back to queue
+                readyQueue.add(job);
+            } else {
+                // Job completed
+                job.setTurnaroundTime(currentTime - job.getArrivalTime());
+                job.setWaitingTime(job.getTurnaroundTime() - job.getOriginalBurstTime());
+                executedQueue.add(job);
+
+                // Free memory
+                if (memoryManager.deallocateMemory(job.getMemoryRequired())) {
+                    addRemaindJop(currentTime);
+                }
             }
-
-            job.setWaitingTime(job.getWaitingTime()-executionTime);
-            executeJob(job,executionTime);
-            currentTime+=executionTime;
-
-           if(job.getBurstTime()>0){
-               readyQueue.add(job);
-
-           } else{
-               job.setWaitingTime((currentTime-job.getArrivalTime())+job.getWaitingTime());
-               job.setTurnaroundTime(currentTime-job.getArrivalTime());
-               executedQueue.add(job);
-               if( memoryManager.deallocateMemory(job.getMemoryRequired())) {
-            	   addRemaindJop(currentTime);
-               }
-           }
-
-
         }
+
+        // Add final time to complete the Gantt Chart
+        timeStamps.add(currentTime);
+
+        // Gantt Chart
+        System.out.println("\nGantt Chart:");
+        System.out.println(GC());
+
+        // Results Summary
+        System.out.println("\nResults:");
+        int totalWaiting = 0;
+        int totalTurnaround = 0;
+
+        for (Job job : executedQueue) {
+            // System.out.println("Job " + job.getId() +
+            //         " | Waiting Time: " + job.getWaitingTime() +
+            //         " | Turnaround Time: " + job.getTurnaroundTime());
+
+            totalWaiting += job.getWaitingTime();
+            totalTurnaround += job.getTurnaroundTime();
+        }
+
+        System.out.printf("Average Waiting Time: %.2f ms\n", (double) totalWaiting / executedQueue.size());
+        System.out.printf("Average Turnaround Time: %.2f ms\n", (double) totalTurnaround / executedQueue.size());
     }
 
-
-
-
-
-
-    public void executeJob(Job job,int executionTime){
-
-        System.out.println("Executing Job ID: " + job.getId()+" for "+executionTime+"ms");
+    public void executeJob(Job job, int executionTime) {
         try {
-            Thread.sleep(executionTime * 10);
+            Thread.sleep(executionTime * 10); // simulate time
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        job.setBurstTime(job.getBurstTime()-executionTime);
-        if(job.getBurstTime()==0)
-        System.out.println("Finished Job ID: " + job.getId());
+
+        job.setBurstTime(job.getBurstTime() - executionTime);
     }
 
-    public void addRemaindJop(int arrivaltime) {
-        while(!WitingQueue.isEmpty()) {
-            Job currentJob=WitingQueue.peek();
-            if(memoryManager.allocateMemory(currentJob.getMemoryRequired())) {
-                currentJob.setArrivalTime(arrivaltime);
+    public void addRemaindJop(int arrivalTime) {
+        while (!waitingQueue.isEmpty()) {
+            Job currentJob = waitingQueue.peek();
+            if (memoryManager.allocateMemory(currentJob.getMemoryRequired())) {
+                currentJob.setArrivalTime(arrivalTime);
                 readyQueue.add(currentJob);
-                WitingQueue.poll();
+                waitingQueue.poll();
+            } else {
+                break;
             }
-            else break;
-
         }
     }
 
-    
+    public String GC() {
+        StringBuilder chart = new StringBuilder();
+
+        for (int i = 0; i < executionLog.size(); i++) {
+            chart.append("|").append(timeStamps.get(i)).append(" ").append(executionLog.get(i)).append(" ");
+        }
+
+        chart.append("|").append(timeStamps.get(timeStamps.size() - 1));
+        return chart.toString();
+    }
 }
