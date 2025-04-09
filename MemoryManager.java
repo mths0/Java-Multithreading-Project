@@ -18,13 +18,8 @@ public class MemoryManager {
 				UsedMemory += memorySize;
 				return true;
 			} else {
-<<<<<<< HEAD
 				return false;
 
-=======
-				//throw new OutOfMemoryError("There is not enough memory to allocate " + memorySize + " MP");
-				return false;
->>>>>>> branch 'main' of https://github.com/mths0/Java-Multithreading-Project
 			}
 		
 	}
