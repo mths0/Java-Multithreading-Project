@@ -47,7 +47,7 @@ public static void main(String[] args) {
 
    
     //wait for all threads
-    try {
+     try {
         jobloader.join();
         scheduler.join();
     } catch (InterruptedException e) {
