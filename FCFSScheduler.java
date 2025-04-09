@@ -12,7 +12,7 @@ public class FCFSScheduler extends Scheduler {
 
         while (!readyQueue.isEmpty()) {
             Job currentJob = readyQueue.poll();
-            //System.out.println(currentJob.getId() + " " + currentJob.getState()); //! remove line
+           
             // Simulate execution
             executeJob(currentJob);
             // Gantt Chart
@@ -41,10 +41,7 @@ public class FCFSScheduler extends Scheduler {
         int totalTurnaround = 0;
 
         for (Job job : executedQueue) {
-            // System.out.println("Job " + job.getId() +
-            //         " | Waiting Time: " + job.getWaitingTime() +
-            //         " | Turnaround Time: " + job.getTurnaroundTime());
-
+      
             totalWaiting += job.getWaitingTime();
             totalTurnaround += job.getTurnaroundTime();
         }

@@ -53,10 +53,7 @@ public class Priority extends Scheduler {
         int totalTurnaround = 0;
 
         for (Job job : executedQueue) {
-            // System.out.println("Job " + job.getId() +
-            //         " | Waiting Time: " + job.getWaitingTime() +
-            //         " | Turnaround Time: " + job.getTurnaroundTime());
-
+   
             totalWaiting += job.getWaitingTime();
             totalTurnaround += job.getTurnaroundTime();
         }

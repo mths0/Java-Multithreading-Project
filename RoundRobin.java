@@ -59,9 +59,6 @@ public class RoundRobin extends Scheduler {
         int totalTurnaround = 0;
 
         for (Job job : executedQueue) {
-            // System.out.println("Job " + job.getId() +
-            //         " | Waiting Time: " + job.getWaitingTime() +
-            //         " | Turnaround Time: " + job.getTurnaroundTime());
 
             totalWaiting += job.getWaitingTime();
             totalTurnaround += job.getTurnaroundTime();
@@ -80,7 +77,6 @@ public class RoundRobin extends Scheduler {
 
         job.setBurstTime(job.getBurstTime() - executionTime);
     }
-
     public void addRemindJop(int currentTime) {
         while (!jobQueue.isEmpty()) {
             Job currentJob = jobQueue.peek();
