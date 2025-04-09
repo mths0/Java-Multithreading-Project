@@ -5,16 +5,13 @@ public abstract class Scheduler extends Thread {
 
     protected MemoryManager memoryManager;
     protected Queue<Job> readyQueue;
-    protected Queue<Job> waitingQueue;
     protected Queue<Job> executedQueue;
     protected Queue<Job> jobQueue;
 
     public Scheduler(Queue<Job> jobQueue, MemoryManager memoryManager) {
         this.jobQueue = jobQueue;
         this.memoryManager = memoryManager;
-
         this.readyQueue = new LinkedList<>();
-        this.waitingQueue = new LinkedList<>();
         this.executedQueue = new LinkedList<>();
     }
 
@@ -24,15 +21,13 @@ public abstract class Scheduler extends Thread {
         while (!jobQueue.isEmpty()) {
             Job currentJob = jobQueue.peek();
             if (memoryManager.allocateMemory(currentJob.getMemoryRequired())) {
-                currentJob = jobQueue.poll();
                 readyQueue.add(currentJob);
-
                 currentJob.setState("Ready");
                 System.out.println(currentJob.getId() + " " + currentJob.getState()); //! remove line
+                jobQueue.poll();
             } else {
                 break;
-                // currentJob.setState("Waiting");
-                //System.out.println(currentJob.getId() + " " + currentJob.getState()); //! remove line
+
             }
         }
 
@@ -44,15 +39,16 @@ public abstract class Scheduler extends Thread {
     public abstract void addRemindJop(int currentTime);
 
     public void executeJob(Job job) {
-        //System.out.println("Executing Job ID: " + job.getId());
+        
         job.setState("Running");
-        //System.out.println(job.getId() + " " + job.getState()); //! remove line
+       
         try {
-            Thread.sleep(job.getBurstTime() ); // Simulate execution time
+            // Simulate execution time
+            Thread.sleep(job.getBurstTime() ); 
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        //System.out.println("Finished Job ID: " + job.getId());
+        
     }
 
     public void calculateWaitingTime() {}  // can be overridden by child
