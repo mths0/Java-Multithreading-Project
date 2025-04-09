@@ -28,7 +28,7 @@ public abstract class Scheduler extends Thread {
                 currentJob.setState("Ready");
                 //System.out.println(currentJob.getId() + " " + currentJob.getState()); //! remove line
             } else {
-                // waitingQueue.add(currentJob);
+                // jobQueue.add(currentJob);
                 // currentJob.setState("Waiting");
                 //System.out.println(currentJob.getId() + " " + currentJob.getState()); //! remove line
             }
