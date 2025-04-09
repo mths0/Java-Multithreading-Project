@@ -26,11 +26,11 @@ public abstract class Scheduler extends Thread {
             if (memoryManager.allocateMemory(currentJob.getMemoryRequired())) {
                 readyQueue.add(currentJob);
                 currentJob.setState("Ready");
-                //System.out.println(currentJob.getId() + " " + currentJob.getState()); //! remove line
+                System.out.println(currentJob.getId() + " " + currentJob.getState()); //! remove line
             } else {
-                // jobQueue.add(currentJob);
+                waitingQueue.add(currentJob);
                 // currentJob.setState("Waiting");
-                //System.out.println(currentJob.getId() + " " + currentJob.getState()); //! remove line
+                System.out.println(currentJob.getId() + " " + currentJob.getState()); //! remove line
             }
         }
 
