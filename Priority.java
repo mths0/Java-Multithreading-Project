@@ -25,6 +25,7 @@ public class Priority extends Scheduler {
         while (!priorityQueue.isEmpty()) {
             Job currentJob = priorityQueue.serve();
             executeJob(currentJob);
+            System.out.println(GC());
 
             currentJob.setWaitingTime(currentTime - currentJob.getArrivalTime());
             currentTime += currentJob.getBurstTime();
@@ -43,7 +44,7 @@ public class Priority extends Scheduler {
         }
 
         // Gantt Chart
-        System.out.println("\nGantt Chart:");
+        
         System.out.println(GC());
 
         // Results Summary
