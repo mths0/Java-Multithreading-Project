@@ -22,15 +22,17 @@ public abstract class Scheduler extends Thread {
     @Override
     public void run() {
         while (!jobQueue.isEmpty()) {
-            Job currentJob = jobQueue.poll();
+            Job currentJob = jobQueue.peek();
             if (memoryManager.allocateMemory(currentJob.getMemoryRequired())) {
+                currentJob = jobQueue.poll();
                 readyQueue.add(currentJob);
+
                 currentJob.setState("Ready");
                 System.out.println(currentJob.getId() + " " + currentJob.getState()); //! remove line
             } else {
-                waitingQueue.add(currentJob);
+                break;
                 // currentJob.setState("Waiting");
-                System.out.println(currentJob.getId() + " " + currentJob.getState()); //! remove line
+                //System.out.println(currentJob.getId() + " " + currentJob.getState()); //! remove line
             }
         }
 
