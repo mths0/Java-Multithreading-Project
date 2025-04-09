@@ -25,8 +25,12 @@ public abstract class Scheduler extends Thread {
             Job currentJob = jobQueue.poll();
             if (memoryManager.allocateMemory(currentJob.getMemoryRequired())) {
                 readyQueue.add(currentJob);
+                currentJob.setState("Ready");
+                //System.out.println(currentJob.getId() + " " + currentJob.getState()); //! remove line
             } else {
-                waitingQueue.add(currentJob);
+                // waitingQueue.add(currentJob);
+                // currentJob.setState("Waiting");
+                //System.out.println(currentJob.getId() + " " + currentJob.getState()); //! remove line
             }
         }
 
@@ -39,8 +43,10 @@ public abstract class Scheduler extends Thread {
 
     public void executeJob(Job job) {
         //System.out.println("Executing Job ID: " + job.getId());
+        job.setState("Running");
+        //System.out.println(job.getId() + " " + job.getState()); //! remove line
         try {
-            Thread.sleep(job.getBurstTime() * 10); // Simulate execution time
+            Thread.sleep(job.getBurstTime() ); // Simulate execution time
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -53,13 +59,14 @@ public abstract class Scheduler extends Thread {
     public String GC() {
         StringBuilder chart = new StringBuilder();
         int currentTime = 0;
-    
+        
         for (Job job : executedQueue) {
             chart.append("|").append(currentTime).append(" P").append(job.getId()).append(" ");
             currentTime += job.getBurstTime();
         }
     
         chart.append("|").append(currentTime); // Final time at the end
+        System.out.println("----------------------------------------------");
         return chart.toString();
     }
     

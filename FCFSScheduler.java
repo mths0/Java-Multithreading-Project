@@ -12,9 +12,12 @@ public class FCFSScheduler extends Scheduler {
 
         while (!readyQueue.isEmpty()) {
             Job currentJob = readyQueue.poll();
-
+            //System.out.println(currentJob.getId() + " " + currentJob.getState()); //! remove line
             // Simulate execution
             executeJob(currentJob);
+            // Gantt Chart
+            System.out.println(GC());
+            
 
             // Set times
             currentJob.setWaitingTime(currentTime - currentJob.getArrivalTime());
@@ -46,7 +49,7 @@ public class FCFSScheduler extends Scheduler {
             totalTurnaround += job.getTurnaroundTime();
         }
 
-        System.out.printf("Average Waiting Time: %.2f ms\n", (double) totalWaiting / executedQueue.size());
+        System.out.printf("Average Waiting Time: %.2f ms\n"   , (double) totalWaiting / executedQueue.size());
         System.out.printf("Average Turnaround Time: %.2f ms\n", (double) totalTurnaround / executedQueue.size());
     }
 
@@ -55,6 +58,7 @@ public class FCFSScheduler extends Scheduler {
         while (!waitingQueue.isEmpty()) {
             Job currentJob = waitingQueue.peek();
             if (memoryManager.allocateMemory(currentJob.getMemoryRequired())) {
+                currentJob.setState("Ready");
                 currentJob.setArrivalTime(currentTime);
                 readyQueue.add(currentJob);
                 waitingQueue.poll();
