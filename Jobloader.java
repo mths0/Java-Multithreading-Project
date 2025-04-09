@@ -37,9 +37,11 @@ public class Jobloader extends Thread {
         int memoryRequired = Integer.parseInt(parts[3]);
 
         Job job = new Job(processID, burstTime, priority, memoryRequired); // create new job
+        job.setState("New");
         jobQueue.add(job); 
 
-        System.out.println("Job loaded :" + job.getId());
+        //System.out.println("Job loaded :" + job.getId());
+        System.out.println(job.toString());
     }
 
 }
