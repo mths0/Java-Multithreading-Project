@@ -27,7 +27,7 @@ public class FCFSScheduler extends Scheduler {
             executedQueue.add(currentJob);
 
             if (memoryManager.deallocateMemory(currentJob.getMemoryRequired())) {
-                addRemaindJop(currentTime);
+                addRemindJop(currentTime);
             }
         }
 
@@ -54,14 +54,14 @@ public class FCFSScheduler extends Scheduler {
     }
 
     @Override
-    public void addRemaindJop(int currentTime) {
-        while (!waitingQueue.isEmpty()) {
-            Job currentJob = waitingQueue.peek();
+    public void addRemindJop(int currentTime) {
+        while (!jobQueue.isEmpty()) {
+            Job currentJob = jobQueue.peek();
             if (memoryManager.allocateMemory(currentJob.getMemoryRequired())) {
                 currentJob.setState("Ready");
                 currentJob.setArrivalTime(currentTime);
                 readyQueue.add(currentJob);
-                waitingQueue.poll();
+                jobQueue.poll();
             } else {
                 break;
             }

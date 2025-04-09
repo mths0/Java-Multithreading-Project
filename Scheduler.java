@@ -41,7 +41,7 @@ public abstract class Scheduler extends Thread {
     }
 
     public abstract void scheduler();
-    public abstract void addRemaindJop(int currentTime);
+    public abstract void addRemindJop(int currentTime);
 
     public void executeJob(Job job) {
         //System.out.println("Executing Job ID: " + job.getId());

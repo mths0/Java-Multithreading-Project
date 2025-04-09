@@ -24,6 +24,8 @@ public class RoundRobin extends Scheduler {
 
             int executionTime = Math.min(job.getBurstTime(), QuantumTime);
 
+            System.out.println(GC());
+
             // Execute
             executeJob(job, executionTime);
             currentTime += executionTime;
@@ -39,7 +41,7 @@ public class RoundRobin extends Scheduler {
 
                 // Free memory
                 if (memoryManager.deallocateMemory(job.getMemoryRequired())) {
-                    addRemaindJop(currentTime);
+                    addRemindJop(currentTime);
                 }
             }
         }
@@ -79,13 +81,14 @@ public class RoundRobin extends Scheduler {
         job.setBurstTime(job.getBurstTime() - executionTime);
     }
 
-    public void addRemaindJop(int arrivalTime) {
-        while (!waitingQueue.isEmpty()) {
-            Job currentJob = waitingQueue.peek();
+    public void addRemindJop(int currentTime) {
+        while (!jobQueue.isEmpty()) {
+            Job currentJob = jobQueue.peek();
             if (memoryManager.allocateMemory(currentJob.getMemoryRequired())) {
-                currentJob.setArrivalTime(arrivalTime);
+                currentJob.setState("Ready");
+                currentJob.setArrivalTime(currentTime);
                 readyQueue.add(currentJob);
-                waitingQueue.poll();
+                jobQueue.poll();
             } else {
                 break;
             }
@@ -100,6 +103,7 @@ public class RoundRobin extends Scheduler {
         }
 
         chart.append("|").append(timeStamps.get(timeStamps.size() - 1));
+        System.out.println("----------------------------------------------");
         return chart.toString();
     }
 }
