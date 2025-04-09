@@ -16,6 +16,7 @@ public static void main(String[] args) {
     Jobloader jobloader = new Jobloader(jobQueue);
     jobloader.start();
     System.out.println(jobQueue.toString());
+    System.out.println();
 
     //user select Scheduling Algorithm
     Scanner scanner = new Scanner(System.in);
@@ -53,7 +54,6 @@ public static void main(String[] args) {
         // TODO Auto-generated catch block
         e.printStackTrace();
     }
-    scheduler.scheduler();
     System.out.println("All jobs have been executed.");
 }
 
