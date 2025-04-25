@@ -1,51 +1,58 @@
+
 import java.util.*;
+import java.util.concurrent.LinkedBlockingQueue;
 
 public class RoundRobin extends Scheduler {
     private final int QuantumTime = 7;
-    private int currentTime = 0;
-
+    private int currentTime ;
+    private Start_load start_load;
     private final List<String> executionLog = new ArrayList<>();
     private final List<Integer> timeStamps = new ArrayList<>();
 
-    public RoundRobin(Queue<Job> jobQueue, MemoryManager memoryManager) {
-        super(jobQueue, memoryManager);
+public RoundRobin(Queue<Job> jobQueue, MemoryManager memoryManager,Start_load Start_load) {
+        super(jobQueue, memoryManager,Start_load);
+        timeStamps.add(0);
+        start_load=Start_load;
+        currentTime = 0;
     }
 
     @Override
-    public void scheduler() {
-        currentTime = 0;
+public void scheduler() {
+        
+boolean there_space=false;
 
-        while (!readyQueue.isEmpty()) {
+       while (!readyQueue.isEmpty()&&!there_space) {
             Job job = readyQueue.poll();
 
             // Mark start time
-            timeStamps.add(currentTime);
+            
             executionLog.add("P" + job.getId());
 
             int executionTime = Math.min(job.getBurstTime(), QuantumTime);
 
-            System.out.println(GC());
-
+            
+            
             // Execute
             executeJob(job, executionTime);
             currentTime += executionTime;
-
+            timeStamps.add(currentTime);
+            System.out.println(GC());
             if (job.getBurstTime() > 0) {
                 // Not finished, go back to queue
                 readyQueue.add(job);
             } else {
                 // Job completed
-                job.setTurnaroundTime(currentTime - job.getArrivalTime());
+                job.setTurnaroundTime(currentTime );
                 job.setWaitingTime(job.getTurnaroundTime() - job.getOriginalBurstTime());
                 executedQueue.add(job);
 
                 // Free memory
                 if (memoryManager.deallocateMemory(job.getMemoryRequired())) {
-                    addRemindJop(currentTime);
+                	there_space=true;
                 }
             }
         }
-
+if(readyQueue.isEmpty()) {
         // Add final time to complete the Gantt Chart
         timeStamps.add(currentTime);
 
@@ -66,7 +73,7 @@ public class RoundRobin extends Scheduler {
 
         System.out.printf("Average Waiting Time: %.2f ms\n", (double) totalWaiting / executedQueue.size());
         System.out.printf("Average Turnaround Time: %.2f ms\n", (double) totalTurnaround / executedQueue.size());
-    }
+    }}
 
     public void executeJob(Job job, int executionTime) {
         try {
@@ -77,19 +84,7 @@ public class RoundRobin extends Scheduler {
 
         job.setBurstTime(job.getBurstTime() - executionTime);
     }
-    public void addRemindJop(int currentTime) {
-        while (!jobQueue.isEmpty()) {
-            Job currentJob = jobQueue.peek();
-            if (memoryManager.allocateMemory(currentJob.getMemoryRequired())) {
-                currentJob.setState("Ready");
-                currentJob.setArrivalTime(currentTime);
-                readyQueue.add(currentJob);
-                jobQueue.poll();
-            } else {
-                break;
-            }
-        }
-    }
+  
 
     public String GC() {
         StringBuilder chart = new StringBuilder();
@@ -98,7 +93,7 @@ public class RoundRobin extends Scheduler {
             chart.append("|").append(timeStamps.get(i)).append(" ").append(executionLog.get(i)).append(" ");
         }
 
-        chart.append("|").append(timeStamps.get(timeStamps.size() - 1));
+        chart.append("|").append(timeStamps.get(timeStamps.size()-1 ));
         System.out.println("----------------------------------------------");
         return chart.toString();
     }
