@@ -1,36 +1,41 @@
 import java.util.Queue;
+import java.util.concurrent.LinkedBlockingQueue;
 
 public class FCFSScheduler extends Scheduler {
-
-    public FCFSScheduler(Queue<Job> jobQueue, MemoryManager memoryManager) {
-        super(jobQueue, memoryManager);
+     private boolean there_space;
+     private int currentTime ;
+    public FCFSScheduler(Queue<Job> jobQueue, MemoryManager memoryManager,Start_load Start_load) {
+        super(jobQueue, memoryManager,Start_load);
+        there_space=false;
+        currentTime = 0;
     }
 
     @Override
     public void scheduler() {
-        int currentTime = 0;
-
-        while (!readyQueue.isEmpty()) {
+        
+        there_space=false;
+        while (!readyQueue.isEmpty()&&!there_space) {
             Job currentJob = readyQueue.poll();
            
             // Simulate execution
             executeJob(currentJob);
+            executedQueue.add(currentJob);
             // Gantt Chart
             System.out.println(GC());
             
 
             // Set times
-            currentJob.setWaitingTime(currentTime - currentJob.getArrivalTime());
+            currentJob.setWaitingTime(currentTime );
             currentTime += currentJob.getBurstTime();
             currentJob.setTurnaroundTime(currentJob.getWaitingTime() + currentJob.getBurstTime());
 
-            executedQueue.add(currentJob);
+            
 
             if (memoryManager.deallocateMemory(currentJob.getMemoryRequired())) {
-                addRemindJop(currentTime);
+               there_space=true;
             }
         }
-
+if(readyQueue.isEmpty()) {
         // Print Gantt Chart
         System.out.println("\nGantt Chart:");
         System.out.println(GC());
@@ -48,20 +53,8 @@ public class FCFSScheduler extends Scheduler {
 
         System.out.printf("Average Waiting Time: %.2f ms\n"   , (double) totalWaiting / executedQueue.size());
         System.out.printf("Average Turnaround Time: %.2f ms\n", (double) totalTurnaround / executedQueue.size());
-    }
+    }}
 
-    @Override
-    public void addRemindJop(int currentTime) {
-        while (!jobQueue.isEmpty()) {
-            Job currentJob = jobQueue.peek();
-            if (memoryManager.allocateMemory(currentJob.getMemoryRequired())) {
-                currentJob.setState("Ready");
-                currentJob.setArrivalTime(currentTime);
-                readyQueue.add(currentJob);
-                jobQueue.poll();
-            } else {
-                break;
-            }
-        }
-    }
+  
+   
 }
