@@ -1,30 +1,44 @@
+
 import java.util.*;
+import java.util.concurrent.LinkedBlockingQueue;
 
 public class Priority extends Scheduler {
 
-    protected PriorityQueue<Job> priorityQueue;
-
-    public Priority(Queue<Job> jobQueue, MemoryManager memoryManager) {
-        super(jobQueue, memoryManager);
+    private PriorityQueue<Job> priorityQueue;
+    private int starvationThreshold ;// change this threshold if needed
+    private int currentTime = 0;
+    private boolean there_space;
+    private List<Job> starvedJobs ;
+    public Priority(Queue<Job> jobQueue, MemoryManager memoryManager,Start_load Start_load) {
+        super(jobQueue, memoryManager,Start_load);
         priorityQueue = new PriorityQueue<>();
+        starvationThreshold = 50;
+        starvedJobs = new ArrayList<>();
     }
 
     @Override
     public void scheduler() {
-        int currentTime = 0;
-        List<Job> starvedJobs = new ArrayList<>();
-        int starvationThreshold = 50; // change this threshold if needed
-
+    	there_space=false;
+      Job firstJob=readyQueue.peek();
+      int i=0;
         // Move all ready jobs to priority queue
         while (!readyQueue.isEmpty()) {
             Job currentJob = readyQueue.poll();
-            priorityQueue.Enqueue(currentJob, currentJob.getPriority());
-        }
+            if(firstJob==currentJob&&i!=0)break;
+            if(!priorityQueue.find(currentJob)) {
+            	currentJob.setArrivalTime(currentTime);
+            priorityQueue.Enqueue(currentJob, currentJob.getPriority());}
+            readyQueue.add(currentJob);
+         i++;
+        } 
+        
 
         // Serve jobs based on priority
-        while (!priorityQueue.isEmpty()) {
+        while (!priorityQueue.isEmpty()&&!there_space) {
             Job currentJob = priorityQueue.serve();
+            readyQueue.remove(currentJob);
             executeJob(currentJob);
+            executedQueue.add(currentJob);
             System.out.println(GC());
 
             currentJob.setWaitingTime(currentTime - currentJob.getArrivalTime());
@@ -36,18 +50,19 @@ public class Priority extends Scheduler {
                 starvedJobs.add(currentJob);
             }
 
-            executedQueue.add(currentJob);
+            
 
-            if (memoryManager.deallocateMemory(currentJob.getMemoryRequired())) {
-                addRemindJop(currentTime);
+            if (memoryManager.deallocateMemory(currentJob.getMemoryRequired())&&!jobQueue.isEmpty()) {
+               
+            	there_space=true;
             }
         }
-
+if(priorityQueue.isEmpty()) {
         // Gantt Chart
         
         System.out.println(GC());
 
-        // Results Summary
+        
         System.out.println("\nResults:");
         int totalWaiting = 0;
         int totalTurnaround = 0;
@@ -61,26 +76,15 @@ public class Priority extends Scheduler {
         System.out.printf("Average Waiting Time: %.2f ms\n", (double) totalWaiting / executedQueue.size());
         System.out.printf("Average Turnaround Time: %.2f ms\n", (double) totalTurnaround / executedQueue.size());
 
-        // Print starved jobs
+        
         if (!starvedJobs.isEmpty()) {
             System.out.println("\nStarved Jobs Detected:");
             for (Job j : starvedJobs) {
                 System.out.println("P" + j.getId() + " | Waited: " + j.getWaitingTime() + "ms");
             }
         }
-    }
+    }}
 
-    @Override
-    public void addRemindJop(int currentTime) {
-        while (!jobQueue.isEmpty()) {
-            Job currentJob = jobQueue.peek();
-            if (memoryManager.allocateMemory(currentJob.getMemoryRequired())) {
-                currentJob.setArrivalTime(currentTime);
-                priorityQueue.Enqueue(currentJob, currentJob.getPriority());
-                jobQueue.poll();
-            } else {
-                break;
-            }
-        }
-    }
+    
+   
 }
