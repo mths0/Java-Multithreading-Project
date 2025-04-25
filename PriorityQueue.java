@@ -1,11 +1,18 @@
 
-
 public class PriorityQueue <T>{
 	private PQNode<T>head;
 
 	private int size;
 	public PriorityQueue() {
 		head=null; size=0;
+	}
+	public boolean find(T e) {
+		if(head==null)return false;
+		PQNode<T>temp=head;
+		while(temp!=null) {
+			if(temp.data==e)return true;
+			temp=temp.next;
+		}return false;
 	}
 	public void Enqueue(T e ,int p) {
 		PQNode<T> n=new PQNode<T>(e,p);
@@ -43,3 +50,4 @@ public class PriorityQueue <T>{
 	}
 	
 }
+
