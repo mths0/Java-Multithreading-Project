@@ -28,7 +28,7 @@ public class FCFSScheduler extends Scheduler {
             currentJob.setWaitingTime(currentTime );
             currentTime += currentJob.getBurstTime();
             currentJob.setTurnaroundTime(currentJob.getWaitingTime() + currentJob.getBurstTime());
-
+            currentJob.setState("Terminated");
             
 
             if (memoryManager.deallocateMemory(currentJob.getMemoryRequired())) {

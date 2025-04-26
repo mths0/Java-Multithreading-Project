@@ -45,6 +45,7 @@ boolean there_space=false;
                 job.setTurnaroundTime(currentTime );
                 job.setWaitingTime(job.getTurnaroundTime() - job.getOriginalBurstTime());
                 executedQueue.add(job);
+                job.setState("Terminated");
 
                 // Free memory
                 if (memoryManager.deallocateMemory(job.getMemoryRequired())) {

@@ -32,12 +32,13 @@ public class Priority extends Scheduler {
          i++;
         } 
         
-
+        
         // Serve jobs based on priority
         while (!priorityQueue.isEmpty()&&!there_space) {
             Job currentJob = priorityQueue.serve();
             readyQueue.remove(currentJob);
             executeJob(currentJob);
+            currentJob.setState("Terminated");
             executedQueue.add(currentJob);
             System.out.println(GC());
 

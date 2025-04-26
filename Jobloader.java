@@ -48,8 +48,8 @@ public class Jobloader extends Thread {
         job.setState("New");
         jobQueue.add(job); 
         
-        //System.out.println("Job loaded :" + job.getId());
-        System.out.println(job.toString());
+        //to show state
+        System.out.println( job.getId() +" "+ job.getState());
         Start_load.Start_load=true;
         
     }
