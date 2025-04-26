@@ -46,10 +46,7 @@ public class Priority extends Scheduler {
             currentTime += currentJob.getBurstTime();
             currentJob.setTurnaroundTime(currentJob.getWaitingTime() + currentJob.getBurstTime());
 
-            // Starvation check
-            if (currentJob.getWaitingTime() > starvationThreshold) {
-                starvedJobs.add(currentJob);
-            }
+            
 
             
 
@@ -74,8 +71,14 @@ if(priorityQueue.isEmpty()) {
             totalTurnaround += job.getTurnaroundTime();
         }
 
-        System.out.printf("Average Waiting Time: %.2f ms\n", (double) totalWaiting / executedQueue.size());
-        System.out.printf("Average Turnaround Time: %.2f ms\n", (double) totalTurnaround / executedQueue.size());
+       double avgWaitingTime=(double) totalWaiting / executedQueue.size();
+       double avgTurnaroundTime=(double) totalTurnaround / executedQueue.size();
+        System.out.printf("Average Waiting Time: %.2f ms\n", avgWaitingTime);
+        System.out.printf("Average Turnaround Time: %.2f ms\n", avgTurnaroundTime);
+        while (!executedQueue.isEmpty()) {
+            Job job = executedQueue.poll(); // or .remove()
+            if(job.getWaitingTime()>=avgWaitingTime)starvedJobs.add(job);
+        }
 
         
         if (!starvedJobs.isEmpty()) {
