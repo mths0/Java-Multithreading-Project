@@ -76,7 +76,7 @@ if(priorityQueue.isEmpty()) {
         System.out.printf("Average Waiting Time: %.2f ms\n", avgWaitingTime);
         System.out.printf("Average Turnaround Time: %.2f ms\n", avgTurnaroundTime);
         while (!executedQueue.isEmpty()) {
-            Job job = executedQueue.poll(); // or .remove()
+            Job job = executedQueue.poll();
             if(job.getWaitingTime()>=avgWaitingTime)starvedJobs.add(job);
         }
 
